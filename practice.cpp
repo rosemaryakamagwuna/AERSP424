@@ -19,3 +19,12 @@ int main() {
     return 0;
 }
 
+int main()
+{
+bool a;
+bool b = true;
+bool c{false};
+std::cout << "b is " << b << std::endl;
+// Let’s guess the size of bool
+std::cout << "Size of bool is: " << sizeof(bool);
+} 
