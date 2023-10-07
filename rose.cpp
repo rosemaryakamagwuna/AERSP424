@@ -1,40 +1,4 @@
-#include <iostream>
-#include <vector>
-#include <cmath>
-
-// Function Declarations
-
-// Question 1
-double aircraft(double Lp, double Ld, int d, double P, double dt);
-
-// Question 2
-double autopilot(double Lp, double Ld, int d, double P, double dt, int K);
-
-// Question 3
-double constantgain(double Lp, double Ld, int d, double P, double dt, double K, int a);
-
-// Question 4
-double dot_product(const std::vector<double>& w, const std::vector<double>& x);
-
-// Question 5a
-double sigmoid(double z_);
-
-// Question 5b
-double gradient_sigmoid(double sigmoid_z);
-
-//Question 6
-double gradient_cost(double ypred , int y);
-
-//Question 7a
-
-double sigmoid_dot(const std::vector<double>& w_, const std::vector<double>& x_);
-std::vector<double> gradient_weight(const std::vector<double>& x_, int y_, double sigmoid_wtx);
-
-//Question 7b
-
-void update_weights(std::vector<double>& w_, const std::vector<double>& dw, double alpha);
-
-
+#include "rose.h"
 
 
 int main() {
@@ -139,8 +103,18 @@ int main() {
     predictor_x.push_back({20.945, 9.170, 8.300, 9.400, 13.000, 12.500, 17.637, 9.600});
 
     std::vector<int> response_y = {1,0,1,0,1,0,1,0};
-    
-   
+
+   for (int iter=0 ; iter < 100; iter++){
+        for ( std::size_t i = 0; i < predictor_x[0].size(); i++ ){
+            std::vector<double> row(predictor_x.size());
+            for (std::size_t j = 0; j < predictor_x.size(); j++){
+                row.push_back(predictor_x[j][i]);
+            }
+            double sigmoid_wtx = sigmoid_dot(ww, row);
+            std::vector<double> dw = gradient_weight(row, response_y[i], sigmoid_wtx);
+            update_weights(ww, dw, alpha_);
+        }
+   }
 
 
     return 0;
@@ -220,7 +194,7 @@ std::vector<double> gradient_weight(const std::vector<double>& x_, int y_, doubl
 void update_weights(std::vector<double>& w_, const std::vector<double>& dw, double alpha) {
     if (w_.size() != dw.size()) {
         std::cerr << "Error: Vectors must have the same size." << std::endl;
-        return; // Return without updating if sizes do not match
+        return; 
     }
 
     for (std::size_t i = 0; i < w_.size(); i++) {
