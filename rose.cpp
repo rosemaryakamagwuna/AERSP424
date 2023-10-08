@@ -99,22 +99,55 @@ int main() {
 
     // Add [approach speed, wingspan, MTOW] to the predictor_x vector
     predictor_x.push_back({124.0, 74.0, 103.0, 77.0, 104.0, 92.0, 130.0, 73.0});
-    predictor_x.push_back({31.89, 51.08, 34,67, 52.00, 35.63, 56.00, 31.29, 52.00});
+    predictor_x.push_back({31.89, 51.08, 34, 67, 52.00, 35.63, 56.00, 31.29, 52.00});
     predictor_x.push_back({20.945, 9.170, 8.300, 9.400, 13.000, 12.500, 17.637, 9.600});
 
     std::vector<int> response_y = {1,0,1,0,1,0,1,0};
 
    for (int iter=0 ; iter < 100; iter++){
         for ( std::size_t i = 0; i < predictor_x[0].size(); i++ ){
-            std::vector<double> row(predictor_x.size());
+            std::vector<double> row;
             for (std::size_t j = 0; j < predictor_x.size(); j++){
                 row.push_back(predictor_x[j][i]);
             }
+        
             double sigmoid_wtx = sigmoid_dot(ww, row);
             std::vector<double> dw = gradient_weight(row, response_y[i], sigmoid_wtx);
             update_weights(ww, dw, alpha_);
         }
    }
+   for (double weights_ : ww) {
+    std::cout << "The update_weights is: " << weights_ << std::endl;
+    }
+
+
+    //Question 9
+
+    std::vector<std::vector <double>>test_x ;
+
+    // Add [approach speed, wingspan, MTOW] to the test_x vector
+    test_x.push_back({87.0, 79.0, 92.0, 91.0});
+    test_x.push_back({38.67, 52.08, 33.75, 59.25});
+    test_x.push_back({6.000, 8.000, 7.804, 16.000});
+    std::vector < std::string> y_predictstring;
+
+    for ( std::size_t i = 0; i < test_x[0].size(); i++ ){
+            std::vector<double> row;
+            for (std::size_t j = 0; j < test_x.size(); j++){
+                row.push_back(test_x[j][i]);
+            }
+        
+            double y_predict = sigmoid_dot(ww, row);
+            if (y_predict> 0.5){
+                y_predictstring.push_back("Jet");
+            }
+            else{
+                y_predictstring.push_back("Turboprop");
+            }
+        }
+    for (std::string y_pred_ : y_predictstring) {
+    std::cout << "The engine type prediction is: " << y_pred_ << std::endl;
+    }
 
 
     return 0;
